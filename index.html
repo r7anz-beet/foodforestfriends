@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Forest Friends V2.0.2 - Ecosystem Sim</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="title-screen">
+        <div class="title-content">
+             <h1>Food Forest Friends</h1>
+             <p class="subtitle">Grow your ecosystem! (V2.0.2)</p>
+             <button id="start-challenge-btn" class="mode-select-btn">Start Challenge Mode</button>
+             <button id="start-creative-btn" class="mode-select-btn">Start Creative Mode</button>
+             <button id="guide-btn" class="title-extra-btn">Game Guide</button>
+         </div>
+         <div class="credit">
+             created by the Canopy Oasis Project
+         </div>
+    </div>
+
+    <div id="guide-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-btn" id="close-guide-btn" title="Close Guide">&times;</span>
+            <h2>Game Guide (v2.0.2)</h2>
+            <div id="guide-text">
+                <h3>Game Modes</h3>
+                 <p><strong>Challenge:</strong> Reach 1000 points as fast as possible! Manage limited Energy and time. Watch out for monoculture penalties and aim for diversity bonuses!</p>
+                 <p><strong>Ranks & Goal Times (Approximate):</strong></p>
+                 <ul>
+                    <li>Platinum: &lt; <span id="guide-platinum-time">?:??</span> (~2:38)</li>
+                    <li>Gold: &lt; <span id="guide-gold-time">?:??</span> (~2:47)</li>
+                    <li>Silver: &lt; <span id="guide-silver-time">?:??</span> (~3:20)</li>
+                    <li>Bronze: &lt; <span id="guide-bronze-time">?:??</span> (~4:10)</li>
+                 </ul>
+                 <p><strong>Creative:</strong> Relax and build your ecosystem with unlimited Energy. No time pressure or score goal.</p>
+                 <hr>
+                 <h3>Plants & Items</h3>
+                 <ul>
+                     <li><strong>Ground Cover:</strong> Fast growing, low cost. Click mature plants to cut, creating a temporary fertile patch that boosts growth of plants planted on it. Yields 0 points.</li>
+                     <li><strong>Herbs:</strong> Fast growing, low cost, low points. Mature herbs spread automatically to nearby empty spots. They also help nearby dropped items sprout faster (boosts chance) and slightly deter deer. Harvest mature plant.</li>
+                     <li><strong>Berries:</strong> Basic producer, low cost. Mature bushes drop berries worth points. Berries have a chance to sprout new bushes every 5 seconds if left unharvested. Harvest the dropped berries.</li>
+                     <li><strong>Corn:</strong> Medium growth/yield, medium cost. Harvest the mature plant directly for points.</li>
+                     <li><strong>Beans:</strong> Medium growth, low yield, medium cost. Mature beans near harvested plants/items give a small yield bonus (Nitrogen Fixation!). Harvest mature plant.</li>
+                     <li><strong>Fruit Tree:</strong> Slow growth, high cost. Produce valuable fruit periodically when mature. Items have a chance to sprout new trees every 5 seconds. Harvest the dropped fruit.</li>
+                     <li><strong>Nut Tree:</strong> Very slow growth, high cost. Produce very valuable nuts periodically when mature. Nut yields boosted by nearby Beans. Items have a chance to sprout new trees every 5 seconds. Harvest the dropped nuts.</li>
+                 </ul>
+                 <hr>
+                 <h3>Mechanics</h3>
+                 <ul>
+                     <li><strong>Energy:</strong> Required to plant. Regenerates slowly over time (faster during Rain, slower during Drought). Unlimited in Creative mode.</li>
+                     <li><strong>Animals (Deer):</strong> Appear randomly. Will eat unprotected plants (Corn, Beans, Berries, Herbs, Young Trees) after 5 seconds unless scared away by clicking them. (Challenge Mode Only)</li>
+                     <li><strong>Fence:</strong> Costs Energy. Protects ALL plants from deer permanently once built.</li>
+                     <li><strong>Fertilizer:</strong> Costs Energy. Temporarily increases points gained from ALL harvests by 25% for 30 seconds.</li>
+                     <li><strong>Weather:</strong> Random Rain boosts energy regen, Drought reduces it. Affects garden visually.</li>
+                     <li><strong>Diversity/Monoculture:</strong> Planting many of the same plant type can incur a point penalty (Monoculture). Planting a variety of species grants a point bonus (Diversity). Status shown in the info panel. (Challenge Mode Only)</li>
+                     <li><strong>Soil Patches:</strong> Created by cutting Ground Cover. Boost growth speed of plants planted directly on them for a short time.</li>
+                     <li><strong>Spreading/Sprouting:</strong> Herbs spread automatically. Dropped items (Fruit, Nut, Berry) check for a chance to sprout every 5 seconds.</li>
+                 </ul>
+                  <hr>
+                  <h3>Tips</h3>
+                  <p>Balance energy use early on. Protect valuable plants with the fence in Challenge mode. Use beans near other plants for a small boost. Cut ground cover strategically for growth speed boosts. Use fertilizer when you have many items/plants ready to harvest! Maintain plant diversity to avoid penalties and gain bonuses in Challenge mode.</p>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="game-container" class="hidden">
+        <h1 id="game-title">Food Forest Friends</h1>
+
+        <div class="game-status">
+            <div class="info-panel">
+                 <div class="info-item">Score: <span id="score">0</span><span id="score-goal-display"> / 1000</span></div>
+                 <div class="info-item">Energy: <span id="energy">100</span><span id="energy-cap-display"> / <span id="energy-cap">100</span></span></div>
+                 <div class="info-item">Fence: <span id="fence-status" class="none">None</span></div>
+                 <div class="info-item">Fertilizer: <span id="fertilizer-status" class="inactive">Inactive</span></div>
+                 <div class="info-item">Status: <span id="diversity-status" class="status-normal">Normal</span></div>
+             </div>
+             <button id="mute-btn" title="Toggle Sound On/Off">🔊</button>
+             <div id="timer-display" class="info-item">Time: <span id="timer">00:00</span></div>
+        </div>
+
+        <div class="controls">
+             <button id="plant-groundCover-btn" data-plant-type="groundCover" title="Ground Cover: Grows fast. Cut when mature for temporary soil enrichment nearby.">Plant Ground Cover (Cost: <span class="cost-groundCover">10</span> E)</button>
+             <button id="plant-herb-btn" data-plant-type="herb" title="Herb: Grows fast, spreads automatically. Harvest for few points. Helps nearby items sprout faster. May deter pests.">Plant Herb (Cost: <span class="cost-herb">12</span> E)</button>
+             <button id="plant-berry-btn" data-plant-type="berry" title="Berry Bush: Medium cost/growth. Drops harvestable berries frequently. Berries may sprout new bushes (10% chance/5s).">Plant Berry Bush (Cost: <span class="cost-berry">15</span> E)</button>
+             <button id="plant-corn-btn" data-plant-type="corn" title="Corn: Quick growth, medium yield. Harvest plant directly.">Plant Corn (Cost: <span class="cost-corn">25</span> E)</button>
+             <button id="plant-bean-btn" data-plant-type="bean" title="Beans: Fixes nitrogen. Slightly boosts yield of nearby plants. Harvest plant directly for few points.">Plant Beans (Cost: <span class="cost-bean">20</span> E)</button>
+             <button id="plant-fruitTree-btn" data-plant-type="fruitTree" title="Fruit Tree: Slow growth, high cost. Drops valuable fruit after maturity. Fruit may sprout new trees (10% chance/5s).">Plant Fruit Tree (Cost: <span class="cost-fruitTree">50</span> E)</button>
+             <button id="plant-nutTree-btn" data-plant-type="nutTree" title="Nut Tree: Very slow growth, high cost. Drops very valuable nuts after maturity. Nuts may sprout new trees (10% chance/5s).">Plant Nut Tree (Cost: <span class="cost-nutTree">70</span> E)</button>
+             <button id="buy-fence-btn" title="Fence: Costs Energy. Permanently protects ALL plants from deer once built.">Build Fence (Cost: <span class="cost-fence">50</span> E)</button>
+             <button id="buy-fertilizer-btn" title="Fertilizer: Costs Energy. Temporarily boosts point yield from all harvests for 30 seconds.">Buy Fertilizer (Cost: <span class="cost-fertilizer">75</span> E)</button>
+             <span id="selection-status">Select a plant type</span>
+             <button id="reset-game-btn" title="Reset all progress">Reset Game</button>
+        </div>
+
+        <div id="challenge-times" class="hidden">
+             <p>Goals:
+                <span class="rank-platinum">Plat &lt; <span id="platinum-time">?:??</span></span> |
+                <span class="rank-gold">Gold &lt; <span id="gold-time">?:??</span></span> |
+                <span class="rank-silver">Silver &lt; <span id="silver-time">?:??</span></span> |
+                <span class="rank-bronze">Bronze &lt; <span id="bronze-time">?:??</span></span>
+             </p>
+        </div>
+        <p class="info-text">Tips: Beans boost yields. Fertilizer boosts all yields. Ground Cover enriches soil. Herbs spread & help others spread. Diversity avoids penalties!</p>
+        <p class="animal-warning hidden">Watch out! Deer may eat unprotected plants!</p>
+
+        <div id="garden">
+             <p class="instructions">Select a plant type, then click in the garden!</p>
+             <div id="win-message" class="hidden">
+                 <h2 id="win-title">Challenge Complete!</h2>
+                 <p>Final Time: <span id="final-time">00:00</span></p>
+                 <p class="rank-display">Rank Achieved: <span id="final-rank" class="rank-none">---</span></p>
+                 <p id="win-achievement" class="win-achievement-text"></p> <button id="win-reset-btn">Play Again?</button>
+             </div>
+             <div id="attack-message" class="hidden"></div>
+             <div id="weather-overlay" class="hidden"></div>
+             <div id="soil-patches"></div>
+             </div>
+
+         <div class="legend">
+             <p><strong>Legend:</strong> Click items/corn/beans/herbs to harvest. Click deer to scare! Click mature Ground Cover to cut.</p>
+             <div><div class="legend-preview plant fruitTree growing"></div> = Young Fruit Tree</div>
+             <div><div class="legend-preview plant fruitTree maturing"></div> = Maturing Fruit Tree</div>
+             <div><div class="legend-preview plant fruitTree mature"></div> = Mature Fruit Tree</div>
+             <div><div class="legend-preview item fruit"></div> = Fruit (+<span class="points-fruitTree">18</span> pts)</div>
+             <hr>
+             <div><div class="legend-preview plant nutTree growing"></div> = Young Nut Tree</div>
+             <div><div class="legend-preview plant nutTree maturing"></div> = Maturing Nut Tree</div>
+             <div><div class="legend-preview plant nutTree mature"></div> = Mature Nut Tree</div>
+             <div><div class="legend-preview item nut"></div> = Nut (+<span class="points-nutTree">25</span> pts)</div>
+             <hr>
+             <div><div class="legend-preview plant corn growing"></div> = Growing Corn</div>
+             <div><div class="legend-preview plant corn mature"></div> = Mature Corn (+<span class="points-corn">35</span> pts)</div>
+             <hr>
+             <div><div class="legend-preview plant bean growing"></div> = Growing Beans</div>
+             <div><div class="legend-preview plant bean mature"></div> = Mature Beans (+<span class="points-bean">5</span> pts)</div>
+             <hr>
+             <div><div class="legend-preview plant berry growing"></div> = Young Berry Bush</div>
+             <div><div class="legend-preview plant berry maturing"></div> = Maturing Berry Bush</div>
+             <div><div class="legend-preview plant berry mature"></div> = Mature Berry Bush</div>
+             <div><div class="legend-preview item berry"></div> = Berry (+<span class="points-berry">9</span> pts)</div>
+             <hr>
+             <div><div class="legend-preview plant groundCover growing"></div> = Growing Ground Cover</div>
+             <div><div class="legend-preview plant groundCover mature"></div> = Mature Ground Cover (Cut for Soil)</div>
+             <hr>
+             <div><div class="legend-preview plant herb growing"></div> = Growing Herb</div>
+             <div><div class="legend-preview plant herb mature"></div> = Mature Herb (+<span class="points-herb">3</span> pts)</div>
+             <hr>
+              <div>
+                  <div class="legend-preview animal deer">
+                      <svg width="60" height="55" viewBox="0 0 60 55" xmlns="http://www.w3.org/2000/svg">
+                          <style>
+                            .deer-body { fill: var(--deer-body, #C8906F); }
+                            .deer-legs { fill: var(--deer-legs, #98644C); }
+                            .deer-head { fill: var(--deer-head, #C8906F); }
+                            .deer-neck { fill: var(--deer-neck, #C8906F); }
+                            .deer-tail { fill: var(--deer-tail, #B67E5B); }
+                            .deer-nose { fill: var(--deer-nose, #3E2925); }
+                            .deer-eye { fill: var(--deer-eye, #3E2B25); }
+                            .deer-ear-inner { fill: var(--deer-ear, #E1B49D); }
+                            .deer-hoof { fill: var(--deer-hoof, #7A564A); }
+                          </style>
+                          <rect class="deer-legs" x="5" y="38" width="5" height="15" rx="2"/>
+                          <rect class="deer-legs" x="12" y="38" width="5" height="15" rx="2"/>
+                          <rect class="deer-legs" x="35" y="38" width="5" height="15" rx="2"/>
+                          <rect class="deer-legs" x="42" y="38" width="5" height="15" rx="2"/>
+                          <rect class="deer-hoof" x="5" y="50" width="5" height="4" rx="1"/>
+                          <rect class="deer-hoof" x="12" y="50" width="5" height="4" rx="1"/>
+                          <rect class="deer-hoof" x="35" y="50" width="5" height="4" rx="1"/>
+                          <rect class="deer-hoof" x="42" y="50" width="5" height="4" rx="1"/>
+                          <path class="deer-tail" d="M 5 20 Q 0 25, 0 30 C 0 35, 5 38, 8 35 Q 10 30, 5 20 Z"/>
+                          <ellipse class="deer-body" cx="27" cy="30" rx="20" ry="12"/>
+                          <path class="deer-neck" d="M 40 25 C 45 15, 48 15, 50 20 L 45 30 C 42 28, 40 25, 40 25 Z"/>
+                          <ellipse class="deer-head" cx="50" cy="15" rx="8" ry="7"/>
+                          <path class="deer-head" d="M 48 5 Q 55 0, 58 8 L 52 10 Z"/>
+                          <path class="deer-ear-inner" d="M 50 6 Q 54 4, 56 8 L 52 9.5 Z"/>
+                          <circle class="deer-eye" cx="53" cy="14" r="1.5"/>
+                          <circle class="deer-nose" cx="57" cy="17" r="2"/>
+                        </svg>
+                  </div> = Deer (Click to scare!)
+              </div>
+             <hr>
+             <small><i>(Herbs spread automatically! Items check to sprout every 5s! Build a fence! Maintain diversity!)</i></small>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+    <script src="script.js"></script> </body>
+</html>

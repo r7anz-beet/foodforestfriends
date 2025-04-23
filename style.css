@@ -1,0 +1,356 @@
+/* --- Game Styles --- */
+/* Version: 2.0.0 */
+:root {
+    /* Define some colors for easier maintenance */
+    --soil-dark: #654321;
+    --soil-light: #8B4513;
+    --soil-patch: rgba(101, 67, 33, 0.2);
+    --soil-patch-shadow: rgba(81, 47, 13, 0.4);
+
+    --leaf-green-dark: #2E8B57; /* Mature Tree Canopy / Mature Berry */
+    --leaf-green-medium: #3CB371; /* Maturing Tree/Bush */
+    --leaf-green-light: #90EE90;  /* Young Tree/Bush */
+    --leaf-green-very-light: #98FB98; /* Herb/Bean leaves */
+    --leaf-ground-cover: #9ACD32; /* Mature Ground Cover */
+    --leaf-ground-cover-young: #B6D88A; /* Young Ground Cover */
+    --herb-accent: #E6E6FA; /* Herb flowers */
+    --herb-mature-green: #8FBC8F; /* Using bean stem green for mature herb */
+
+    --fruit-red: #FF6347;
+    --berry-pink: #FF1493;
+    --nut-brown: #A0522D;
+    --nut-shell: #DEB887;
+
+    --corn-yellow: #FFD700;
+    --corn-husk-mature: #DAA520;
+    --corn-leaf: #228B22;
+    --corn-stalk-young: #90EE90;
+
+    --bean-pod: #3CB371;
+    --bean-stem: #8FBC8F; /* Also used for mature herb base */
+
+    --deer-body: #C19A6B; /* Tan */
+    --deer-legs: #A0522D; /* Darker brown for legs/tail */
+    --deer-head: #D2B48C; /* Slightly lighter tan for head */
+    --deer-nose: #442C14;
+    --deer-eye: #222;
+    --deer-ear: #E4C8A4; /* Inner ear */
+
+    --fence-color: #4CAF50;
+    --fertilizer-glow: rgba(76, 175, 80, 0.7);
+    --fertilizer-glow-pulse: rgba(129, 212, 132, 0.9);
+
+    /* Rank Colors */
+    --rank-platinum: #E5E4E2; /* Platinum */
+    --rank-gold: #FFD700; /* Gold */
+    --rank-silver: #C0C0C0; /* Silver */
+    --rank-bronze: #CD7F32; /* Bronze */
+    --rank-none: #eee; /* Default/No Rank */
+}
+
+/* Utility */
+.hidden { display: none !important; }
+
+/* --- Title Screen & Guide Modal Styles --- */
+#title-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #4caf50, #2e7d32); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 100; text-align: center; color: white; padding: 20px; box-sizing: border-box; }
+#title-screen .title-content { flex-grow: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding-bottom: 30px; }
+#title-screen h1 { font-size: 3.5em; margin-bottom: 15px; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); font-family: 'Arial Rounded MT Bold', 'Helvetica Rounded', Arial, sans-serif; }
+#title-screen .subtitle { font-size: 1.2em; margin-bottom: 30px; color: rgba(255, 255, 255, 0.9); }
+.mode-select-btn { padding: 12px 25px; font-size: 1.3em; cursor: pointer; background-color: #ffc107; color: #333; border: none; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); transition: background-color 0.2s ease, transform 0.1s ease; margin: 10px; }
+.mode-select-btn:hover { background-color: #ffca28; } .mode-select-btn:active { transform: scale(0.98); }
+.title-extra-btn { padding: 8px 15px; font-size: 1em; cursor: pointer; background-color: rgba(255, 255, 255, 0.2); color: white; border: 1px solid rgba(255, 255, 255, 0.5); border-radius: 6px; margin-top: 20px; transition: background-color 0.2s ease; }
+.title-extra-btn:hover { background-color: rgba(255, 255, 255, 0.3); }
+#title-screen .credit { width: 100%; position: absolute; bottom: 15px; left: 0; font-size: 0.9em; color: rgba(255, 255, 255, 0.8); }
+.modal { position: fixed; z-index: 110; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; }
+.modal-content { background-color: #fefefe; margin: auto; padding: 25px; border: 1px solid #888; width: 80%; max-width: 600px; border-radius: 8px; position: relative; max-height: 80vh; overflow-y: auto; box-sizing: border-box; }
+.close-btn { color: #aaa; position: absolute; top: 10px; right: 15px; font-size: 28px; font-weight: bold; cursor: pointer; }
+.close-btn:hover, .close-btn:focus { color: black; text-decoration: none; }
+#guide-text h3 { margin-top: 15px; margin-bottom: 5px; color: #2e7d32; }
+#guide-text p { margin-bottom: 10px; line-height: 1.4; }
+#guide-text ul { margin-left: 20px; margin-bottom: 10px;}
+#guide-text hr { border: 0; border-top: 1px solid #eee; margin: 15px 0; }
+/* Style guide times */
+#guide-platinum-time, #guide-gold-time, #guide-silver-time, #guide-bronze-time { font-weight: bold; }
+#guide-platinum-time { color: var(--rank-platinum); text-shadow: 1px 1px 1px #555; }
+#guide-gold-time { color: var(--rank-gold); }
+#guide-silver-time { color: var(--rank-silver); }
+#guide-bronze-time { color: var(--rank-bronze); }
+
+
+/* --- Game Layout, Status, Controls Styles --- */
+body { font-family: sans-serif; min-height: 100vh; background-color: #f0f0f0; margin: 0; padding: 10px; box-sizing: border-box; }
+#game-container { margin: 20px auto; border: 2px solid #555; background-color: #e0ffe0; padding: 20px; box-shadow: 3px 3px 10px rgba(0,0,0,0.1); max-width: 600px; width: 95%; box-sizing: border-box; }
+#game-container h1 { color: #333; margin-bottom: 15px; text-align: center; font-size: 1.8em; }
+.game-status { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-bottom: 15px; padding: 5px; background-color: rgba(0, 0, 0, 0.05); border-radius: 4px; }
+.info-panel { display: flex; justify-content: flex-start; font-size: 1.1em; color: #2a5c2a; flex-wrap: wrap; gap: 10px; flex-grow: 1; }
+.info-item { margin: 0; white-space: nowrap; padding: 0 5px; }
+#timer-display { font-size: 1.1em; color: #333; font-weight: bold; margin-left: 10px; padding-right: 5px; }
+#score, #energy, #energy-cap, #timer, #fence-status, #fertilizer-status { font-weight: bold; }
+#fence-status.built { color: green; } #fence-status.none { color: #888; }
+#fertilizer-status.inactive { color: #888; } #fertilizer-status.active { color: #3a8a3a; animation: pulse-fertilizer 1s infinite; }
+@keyframes pulse-fertilizer { 0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; } }
+#mute-btn { background: none; border: none; font-size: 1.4em; cursor: pointer; padding: 0 5px; margin-left: 10px; opacity: 0.7; transition: opacity 0.2s; }
+#mute-btn:hover { opacity: 1; }
+#mute-btn.muted { opacity: 0.3; text-decoration: line-through; text-decoration-color: red; }
+/* Diversity Status Styling */
+#diversity-status { font-weight: bold; font-style: italic; }
+#diversity-status.status-normal { color: #555; }
+#diversity-status.status-bonus { color: #1a7a1a; } /* Darker green for bonus */
+#diversity-status.status-penalty { color: #d9534f; } /* Red for penalty */
+
+.controls { margin-bottom: 10px; text-align: center; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 8px; }
+.controls button { padding: 8px 12px; font-size: 0.85em; cursor: pointer; border: 1px solid #888; border-radius: 4px; background-color: #f8f8f8; position: relative; }
+.controls button:hover { background-color: #e8e8e8; }
+.controls button:disabled { background-color: #ccc; color: #777; cursor: not-allowed; opacity: 0.6; }
+.controls button.selected { border-color: #006400; background-color: #c8e6c9; font-weight: bold; }
+#selection-status { font-style: italic; color: #555; margin-left: 10px; flex-basis: 100%; text-align: center; margin-top: 5px; min-height: 1.2em; /* Prevent layout shift */ }
+#reset-game-btn { background-color: #ffdddd; border-color: #c00; color: #900; margin-left: auto; } #reset-game-btn:hover { background-color: #ffcccc; }
+#buy-fence-btn { background-color: #d4e1f5; border-color: #87a5d4; } #buy-fence-btn:hover { background-color: #c2d4f0; }
+#buy-fertilizer-btn { background-color: #e8f5e9; border-color: #a5d6a7; } #buy-fertilizer-btn:hover { background-color: #dcedc8; }
+#buy-fertilizer-btn:disabled { background-color: #e0e0e0; border-color: #ccc; color: #999; cursor: not-allowed; }
+#buy-fence-btn:disabled { background-color: #e0e0e0; border-color: #ccc; color: #999; cursor: not-allowed; }
+
+/* Updated Challenge Times Display */
+#challenge-times { text-align: center; font-size: 0.9em; color: #555; margin-bottom: 5px; padding: 4px; background-color: rgba(0, 0, 0, 0.03); border-radius: 4px; }
+#challenge-times p { margin: 0; }
+#challenge-times span { font-weight: bold; margin: 0 3px; }
+/* Rank Colors */
+#challenge-times .rank-platinum, #final-rank.rank-platinum { color: var(--rank-platinum); text-shadow: 1px 1px 1px #555; }
+#challenge-times .rank-gold, #final-rank.rank-gold { color: var(--rank-gold); text-shadow: 1px 1px 2px black; }
+#challenge-times .rank-silver, #final-rank.rank-silver { color: var(--rank-silver); text-shadow: 1px 1px 2px black; }
+#challenge-times .rank-bronze, #final-rank.rank-bronze { color: var(--rank-bronze); text-shadow: 1px 1px 2px black; }
+#final-rank.rank-none { color: var(--rank-none); font-style: italic; }
+
+
+.info-text { text-align: center; font-size: 0.85em; color: #666; margin: 0 10px 5px 10px; line-height: 1.3; }
+.animal-warning { text-align: center; font-size: 0.85em; font-style: italic; color: #d9534f; margin: 0 0 10px 0; }
+
+
+/* --- Garden & Messages Styles --- */
+#garden {
+  background-color: #e8f5e9; /* Light Greenish */
+  width: 100%;
+  padding-bottom: 75%; /* Aspect ratio */
+  border: 1px solid var(--soil-light);
+  position: relative; /* Establishes positioning context for absolute children */
+  cursor: crosshair;
+  overflow: hidden; /* Prevents children from affecting layout outside */
+  margin-bottom: 15px;
+  box-sizing: border-box;
+  transition: border 0.5s ease-in-out;
+}
+#garden.fenced { border: 4px dashed var(--fence-color); box-shadow: inset 0 0 10px rgba(76, 175, 80, 0.3); }
+.instructions { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: rgba(0, 0, 0, 0.6); font-style: italic; pointer-events: none; user-select: none; text-align: center; padding: 10px; }
+/* Updated Win Message */
+#win-message { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 80, 0, 0.85); color: white; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; z-index: 50; padding: 20px; border-radius: 5px; box-sizing: border-box;}
+#win-message h2 { font-size: 2.5em; margin-bottom: 10px; text-shadow: 1px 1px 3px black; }
+#win-message p { font-size: 1.2em; margin-bottom: 10px; }
+#win-message .rank-display { font-size: 1.3em; font-weight: bold; margin-bottom: 15px; } /* Adjusted margin */
+.win-achievement-text { font-size: 1.1em; font-style: italic; color: #ffc107; margin-bottom: 20px; min-height: 1.3em; } /* Style for achievement text */
+#win-reset-btn { padding: 12px 25px; font-size: 1.2em; cursor: pointer; background-color: #ffc107; color: #333; border: none; border-radius: 6px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); } #win-reset-btn:hover { background-color: #ffca28; }
+
+#attack-message { position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); background-color: rgba(200, 0, 0, 0.8); color: white; padding: 5px 15px; border-radius: 15px; font-size: 0.9em; z-index: 60; text-align: center; opacity: 0; transition: opacity 0.5s ease-in-out; pointer-events: none; }
+#attack-message.visible { opacity: 1; }
+#weather-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 45; pointer-events: none; display: none; opacity: 0; transition: opacity 0.8s ease-in-out; }
+#weather-overlay.visible { display: block; opacity: 1; }
+#weather-overlay.rain { background: linear-gradient(rgba(100, 100, 200, 0.05), rgba(150, 150, 255, 0.15)); }
+#weather-overlay.drought { background-color: rgba(210, 180, 140, 0.15); backdrop-filter: sepia(0.1) blur(0.5px); }
+#soil-patches { position: absolute; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; z-index: 0; }
+.fertile-patch { position: absolute; border-radius: 50%; background-color: var(--soil-patch); box-shadow: inset 0 0 5px var(--soil-patch-shadow); opacity: 1; transform: translate(-50%, -50%); transition: opacity 1s ease-out; z-index: 1; }
+.fertile-patch.fading-out { opacity: 0; }
+
+
+/* ================== CSS Visuals START ================== */
+
+/* --- Base Element Styles --- */
+.plant, .item, .animal {
+    box-sizing: border-box;
+    position: absolute; /* Explicitly set position to absolute */
+    width: 40px; height: 40px; /* Default size */
+    transform: translate(-50%, -50%); /* Center on calculated X, Y */
+    background: transparent; /* Base elements are containers, visuals are ::before/::after */
+    pointer-events: auto; /* Allow clicks on these elements */
+}
+.plant { cursor: default; z-index: 5; }
+.item { width: 20px; height: 20px; cursor: pointer; z-index: 10; }
+.animal { width: 45px; height: 40px; cursor: pointer; z-index: 40; transition: opacity 0.3s ease-out; }
+
+/* Make specific mature plants clickable */
+.plant.mature.corn, .plant.mature.bean, .plant.mature.herb, .plant.mature.groundCover { cursor: pointer; }
+
+/* Growth Stage Adjustments */
+.plant.growing { opacity: 0.7; transform: translate(-50%, -50%) scale(0.7); transition: transform 0.3s ease-out, opacity 0.3s ease-out; }
+.plant.maturing { opacity: 0.9; transform: translate(-50%, -50%) scale(0.85); transition: transform 0.3s ease-out, opacity 0.3s ease-out; }
+.plant.mature { opacity: 1; transform: translate(-50%, -50%) scale(1.0); transition: transform 0.3s ease-out, opacity 0.3s ease-out; }
+
+/* Fertilizer Effect */
+.plant.fertilized { box-shadow: 0 0 8px 4px var(--fertilizer-glow); animation: pulse-glow-shadow 1.5s infinite ease-in-out; border-radius: 50%; }
+@keyframes pulse-glow-shadow { 0% { box-shadow: 0 0 6px 4px var(--fertilizer-glow); opacity: 0.7; } 50% { box-shadow: 0 0 12px 7px var(--fertilizer-glow-pulse); opacity: 1; } 100% { box-shadow: 0 0 6px 4px var(--fertilizer-glow); opacity: 0.7; } }
+
+/* --- Specific Plant Styles --- */
+/* (Plant styles remain the same as previous version) */
+/* Fruit Tree */
+.plant.fruitTree { width: 40px; height: 50px; }
+.plant.fruitTree::before { content: ''; position: absolute; bottom: 0; left: 50%; z-index: 1; width: 8px; height: 40%; background-color: var(--soil-light); border-radius: 3px 3px 0 0; transform: translateX(-50%); transition: height 0.3s ease-out; }
+.plant.fruitTree::after { content: ''; position: absolute; bottom: 35%; left: 50%; z-index: 2; width: 100%; height: 65%; background-color: var(--leaf-green-light); border-radius: 50% 50% 40% 40% / 70% 70% 30% 30%; transform: translateX(-50%); transition: all 0.3s ease-out; }
+.plant.fruitTree.growing::before { height: 25%; }
+.plant.fruitTree.growing::after { height: 55%; bottom: 20%; background-color: var(--leaf-green-light); }
+.plant.fruitTree.maturing::before { height: 35%; }
+.plant.fruitTree.maturing::after { height: 65%; bottom: 30%; background-color: var(--leaf-green-medium); }
+.plant.fruitTree.mature::before { height: 40%; }
+.plant.fruitTree.mature::after { height: 70%; bottom: 35%; background-color: var(--leaf-green-dark); background-image: radial-gradient(circle at 30% 35%, var(--fruit-red) 4px, transparent 4.5px), radial-gradient(circle at 65% 50%, var(--fruit-red) 4px, transparent 4.5px), radial-gradient(circle at 45% 70%, var(--fruit-red) 4px, transparent 4.5px); background-repeat: no-repeat; background-size: 100% 100%; background-position: center; }
+/* Nut Tree */
+.plant.nutTree { width: 45px; height: 55px; }
+.plant.nutTree::before { content: ''; position: absolute; bottom: 0; left: 50%; z-index: 1; width: 10px; height: 45%; background-color: var(--soil-dark); border-radius: 4px 4px 0 0; transform: translateX(-50%); transition: height 0.3s ease-out; }
+.plant.nutTree::after { content: ''; position: absolute; bottom: 40%; left: 50%; z-index: 2; width: 100%; height: 60%; background-color: #8FBC8F; border-radius: 50% 50% 50% 50% / 65% 65% 35% 35%; transform: translateX(-50%); transition: all 0.3s ease-out; }
+.plant.nutTree.growing::before { height: 30%; width: 8px;}
+.plant.nutTree.growing::after { height: 50%; bottom: 25%; background-color: #8FBC8F; }
+.plant.nutTree.maturing::before { height: 40%; width: 9px;}
+.plant.nutTree.maturing::after { height: 60%; bottom: 35%; background-color: #556B2F; }
+.plant.nutTree.mature::before { height: 45%; width: 10px;}
+.plant.nutTree.mature::after { height: 70%; bottom: 40%; background-color: #006400; background-image: radial-gradient(ellipse at 25% 40%, var(--nut-brown) 4px, var(--nut-shell) 5px, transparent 5.5px), radial-gradient(ellipse at 70% 55%, var(--nut-brown) 4px, var(--nut-shell) 5px, transparent 5.5px), radial-gradient(ellipse at 45% 75%, var(--nut-brown) 4px, var(--nut-shell) 5px, transparent 5.5px); background-repeat: no-repeat; background-size: 100% 100%; }
+/* Corn */
+.plant.corn { width: 25px; height: 50px; }
+.plant.corn::before { content: ''; position: absolute; bottom: 0; left: 50%; z-index: 1; width: 6px; height: 80%; background-color: var(--corn-stalk-young); border-radius: 2px 2px 0 0; transform: translateX(-50%); transition: background-color 0.3s ease-out, height 0.3s ease-out; }
+.plant.corn::after { content: ''; position: absolute; bottom: 0; left: 50%; z-index: 2; width: 100%; height: 100%; transform: translateX(-50%); background: linear-gradient(135deg, transparent 40%, var(--leaf-green-light) 41%, var(--leaf-green-light) 59%, transparent 60%) 10% 40% / 70% 60% no-repeat, linear-gradient(45deg, transparent 40%, var(--leaf-green-light) 41%, var(--leaf-green-light) 59%, transparent 60%) 90% 40% / 70% 60% no-repeat; transition: background 0.3s ease-out; }
+.plant.corn.growing::before { height: 60%; background-color: var(--corn-stalk-young); }
+.plant.corn.growing::after { background-size: 60% 50%; background-position: 15% 50%, 85% 50%; }
+.plant.corn.mature { height: 60px; }
+.plant.corn.mature::before { height: 90%; width: 8px; background-color: var(--corn-husk-mature); }
+.plant.corn.mature::after { bottom: 10%; height: 80%; background-color: var(--corn-husk-mature); background-image: linear-gradient(160deg, transparent 30%, var(--corn-leaf) 31%, var(--corn-leaf) 50%, transparent 51%), linear-gradient(20deg, transparent 30%, var(--corn-leaf) 31%, var(--corn-leaf) 50%, transparent 51%), repeating-linear-gradient(45deg, var(--corn-yellow) 0px, var(--corn-yellow) 2px, transparent 2px, transparent 4px); background-size: 90% 90%, 90% 90%, 40% 50%; background-position: 0% 100%, 100% 100%, center center; background-repeat: no-repeat; border-radius: 10px 10px 5px 5px / 40px 40px 5px 5px; }
+/* Beans */
+.plant.bean { width: 20px; height: 50px; }
+.plant.bean::before { content: ''; position: absolute; bottom: 0; left: 50%; z-index: 1; width: 4px; height: 100%; background-color: var(--bean-stem); border-radius: 2px 2px 0 0; transform: translateX(-50%); transition: background 0.3s ease-out; }
+.plant.bean::after { content: ''; position: absolute; top: 20%; left: -5px; z-index: 2; width: 14px; height: 18px; background-color: var(--leaf-green-very-light); border-radius: 50% 0 50% 0; transform: rotate(-30deg); transition: all 0.3s ease-out; }
+.plant.bean > div.bean-extra-leaf { position: absolute; top: 40%; right: -5px; z-index: 2; width: 14px; height: 18px; background-color: var(--leaf-green-very-light); border-radius: 0 50% 0 50%; transform: rotate(30deg); transition: all 0.3s ease-out; }
+.plant.bean.growing::after, .plant.bean.growing > div.bean-extra-leaf { width: 10px; height: 14px; background-color: var(--leaf-green-very-light); }
+.plant.bean.mature::before { background: linear-gradient(var(--bean-pod) 0 0) 50% 20% / 6px 16px no-repeat, var(--bean-stem); border-radius: 2px; }
+.plant.bean.mature::after { top: 30%; left: -7px; width: 8px; height: 20px; background-color: var(--bean-pod); border-radius: 4px; transform: rotate(-15deg); }
+.plant.bean.mature > div.bean-extra-leaf { top: 55%; right: -7px; width: 8px; height: 18px; background-color: var(--bean-pod); border-radius: 4px; transform: rotate(15deg); }
+/* Berry Bush */
+.plant.berry { width: 35px; height: 35px; }
+.plant.berry::before { content: ''; position: absolute; bottom: 10%; left: 10%; z-index: 1; width: 60%; height: 60%; background-color: var(--leaf-green-light); border-radius: 50%; transition: background 0.3s ease-out; }
+.plant.berry::after { content: ''; position: absolute; bottom: 10%; right: 10%; z-index: 1; width: 60%; height: 60%; background-color: var(--leaf-green-light); border-radius: 50%; transition: background 0.3s ease-out; }
+.plant.berry > div.berry-center-clump { position: absolute; bottom: 30%; left: 50%; transform: translateX(-50%); z-index: 2; width: 50%; height: 50%; background-color: var(--leaf-green-light); border-radius: 50%; transition: background 0.3s ease-out; }
+.plant.berry.growing::before, .plant.berry.growing::after, .plant.berry.growing > div.berry-center-clump { background-color: var(--leaf-green-light); }
+.plant.berry.maturing::before, .plant.berry.maturing::after, .plant.berry.maturing > div.berry-center-clump { background-color: var(--leaf-green-medium); }
+.plant.berry.mature::before { background: var(--leaf-green-dark) radial-gradient(circle at 70% 70%, var(--berry-pink) 3px, transparent 3.5px) no-repeat; }
+.plant.berry.mature::after { background: var(--leaf-green-dark) radial-gradient(circle at 30% 70%, var(--berry-pink) 3px, transparent 3.5px) no-repeat; }
+.plant.berry.mature > div.berry-center-clump { background: var(--leaf-green-dark) radial-gradient(circle at 50% 40%, var(--berry-pink) 3px, transparent 3.5px) no-repeat; z-index: 3; }
+/* Ground Cover */
+.plant.groundCover { width: 35px; height: 20px; }
+.plant.groundCover::before { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to top, var(--leaf-ground-cover-young) 60%, transparent); border-radius: 15px 15px 0 0 / 10px 10px 0 0; transition: background 0.3s ease-out; }
+.plant.groundCover.growing::before { background: linear-gradient(to top, var(--leaf-ground-cover-young) 40%, transparent); }
+.plant.groundCover.mature::before { background: linear-gradient(to top, var(--leaf-ground-cover) 80%, transparent); }
+/* Herb */
+.plant.herb { width: 30px; height: 30px; }
+.plant.herb::before { content: ''; position: absolute; bottom: 0; left: 5%; width: 40%; height: 70%; background-color: var(--leaf-green-very-light); border-radius: 50% 50% 0 0; transform: rotate(-15deg); transition: background-color 0.3s ease-out; }
+.plant.herb::after { content: ''; position: absolute; bottom: 0; right: 5%; width: 40%; height: 70%; background-color: var(--leaf-green-very-light); border-radius: 50% 50% 0 0; transform: rotate(15deg); transition: background-color 0.3s ease-out; }
+.plant.herb > div.herb-center-clump { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); z-index: 1; width: 45%; height: 80%; background-color: var(--leaf-green-very-light); border-radius: 50% 50% 0 0; transition: background 0.3s ease-out; }
+.plant.herb.growing::before, .plant.herb.growing::after, .plant.herb.growing > div.herb-center-clump { height: 60%; background-color: var(--leaf-green-very-light); }
+.plant.herb.mature::before, .plant.herb.mature::after { background-color: var(--herb-mature-green); }
+.plant.herb.mature > div.herb-center-clump { background: var(--herb-mature-green) radial-gradient(circle at 50% 30%, var(--herb-accent) 2px, transparent 2.5px) no-repeat, radial-gradient(circle at 30% 50%, var(--herb-accent) 1.5px, transparent 2px) no-repeat, radial-gradient(circle at 70% 50%, var(--herb-accent) 1.5px, transparent 2px) no-repeat; }
+
+/* --- Item Styles --- */
+.item { width: 20px; height: 20px; border-radius: 50%; position: relative; animation: dropPulse 1.5s infinite ease-in-out alternate; z-index: 10; }
+@keyframes dropPulse { 0% { transform: translate(-50%, -50%) scale(0.9); } 100% { transform: translate(-50%, -50%) scale(1.1); } }
+.item.fruit { background-color: var(--fruit-red); }
+.item.fruit::before { content: ''; position: absolute; top: -2px; left: 50%; width: 2px; height: 4px; background-color: var(--soil-dark); border-radius: 2px; transform: translateX(-50%); }
+.item.nut { width: 18px; height: 22px; background-color: var(--nut-brown); border: 1px solid var(--nut-shell); border-radius: 40% 40% 50% 50% / 60% 60% 40% 40%; }
+.item.nut::before { content: ''; position: absolute; top: -1px; left: 50%; transform: translateX(-50%); width: 80%; height: 40%; background-color: var(--nut-shell); border-radius: 5px 5px 0 0 / 3px 3px 0 0; background-image: repeating-linear-gradient(45deg, transparent, transparent 1px, rgba(0,0,0,0.1) 1px, rgba(0,0,0,0.1) 2px); }
+.item.berry { background-color: var(--berry-pink); width: 16px; height: 16px; }
+.item.berry::before { content: ''; position: absolute; top: -1px; left: 50%; width: 5px; height: 5px; background-color: var(--leaf-green-medium); transform: translate(-50%, -50%) rotate(45deg); }
+.item.berry::after { content: ''; position: absolute; top: -1px; left: 50%; width: 5px; height: 5px; background-color: var(--leaf-green-medium); transform: translate(-50%, -50%) rotate(-45deg); }
+
+/* --- Animal Styles --- */
+/* --- UPDATED: Sideways Deer Graphic --- */
+.animal.deer {
+    width: 50px; /* Increased width for sideways view */
+    height: 45px; /* Slightly increased height */
+    position: relative; /* Needed for absolute positioning of parts */
+    /* background-color: rgba(0, 255, 0, 0.1); */ /* Optional: for debugging bounds */
+}
+
+/* Remove old pseudo-elements if they existed */
+.animal.deer::before,
+.animal.deer::after {
+    content: none;
+}
+/* Remove old nested divs if they existed */
+.animal.deer > div {
+    display: none;
+}
+
+/* New Deer Parts using Pseudo-elements */
+.animal.deer {
+    /* Legs (using box-shadow for multiple simple shapes) */
+    box-shadow:
+        /* Back Leg 1 */
+        -12px 0px 0 0px var(--deer-legs),
+        /* Back Leg 2 (slightly behind) */
+        -16px 0px 0 0px var(--deer-legs),
+        /* Front Leg 1 */
+        8px 0px 0 0px var(--deer-legs),
+        /* Front Leg 2 (slightly behind) */
+        12px 0px 0 0px var(--deer-legs);
+    /* Adjust vertical position if needed */
+     /* top: 5px; */
+}
+
+.animal.deer::before { /* Body */
+    content: '';
+    position: absolute;
+    bottom: 5px; /* Raise body slightly for legs */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 65%; /* Body width */
+    height: 55%; /* Body height */
+    background-color: var(--deer-body);
+    border-radius: 40% 60% 50% 50% / 50% 50% 50% 50%; /* Oval-like body shape */
+    z-index: 2;
+}
+
+.animal.deer::after { /* Head, Neck, Ear, Eye, Nose, Tail */
+    content: '';
+    position: absolute;
+    /* Head */
+    top: 0;
+    right: -5px; /* Position head to the right */
+    width: 22px;
+    height: 20px;
+    background-color: var(--deer-head);
+    border-radius: 50% 50% 40% 40% / 60% 60% 40% 40%;
+    z-index: 3;
+    /* Neck (using border) */
+    border-left: 8px solid var(--deer-body); /* Connects head to body area */
+    border-bottom: 5px solid transparent; /* Slants the neck */
+    /* Ear */
+    box-shadow:
+        /* Ear shape */
+        5px -8px 0 -2px var(--deer-head), /* Outer ear */
+        5px -7px 0 -1px var(--deer-ear), /* Inner ear color */
+        /* Eye */
+        12px 5px 0 -1px var(--deer-eye), /* Small dot for eye */
+        /* Nose */
+        20px 8px 0 -1px var(--deer-nose), /* Nose dot */
+        /* Tail */
+        -38px 15px 0 -1px var(--deer-legs); /* Tail on the left */
+}
+/* ================== CSS Visuals END ================== */
+
+
+/* --- Legend Styles --- */
+.legend { font-size: 0.9em; color: #444; margin-top: 10px; line-height: 1.6; clear: both; }
+.legend p { margin: 0 0 5px 0; }
+.legend div { margin-left: 10px; display: flex; align-items: center; margin-bottom: 4px; min-height: 25px; }
+.legend hr { border: 0; border-top: 1px dashed #ccc; margin: 5px 0; }
+.legend small { display: block; text-align: center; margin-top: 5px; color: #555; }
+.legend-preview { display: inline-block; vertical-align: middle; margin-right: 8px; flex-shrink: 0; position: relative; transform: none !important; opacity: 1 !important; transform: scale(0.7) !important; transform-origin: center center; top: -3px; }
+.legend-preview.item { transform: scale(1.0) !important; top: 0px; }
+.legend-preview.animal { transform: scale(0.65) !important; top: -2px;}
+
+/* Keyframes defined earlier */
+@keyframes pulse-fertilizer { 0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; } }
+@keyframes pulse-glow-shadow { 0% { box-shadow: 0 0 6px 4px var(--fertilizer-glow); opacity: 0.7; } 50% { box-shadow: 0 0 12px 7px var(--fertilizer-glow-pulse); opacity: 1; } 100% { box-shadow: 0 0 6px 4px var(--fertilizer-glow); opacity: 0.7; } }
+@keyframes dropPulse { 0% { transform: translate(-50%, -50%) scale(0.9); } 100% { transform: translate(-50%, -50%) scale(1.1); } }
+
